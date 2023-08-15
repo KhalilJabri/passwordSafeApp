@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Dimensions, Image } from 'react-native'
 import { primaryColor } from '../constants/colors'
 
 const OtpVervification = () => {
@@ -11,6 +11,28 @@ const OtpVervification = () => {
     const ref_input2 = useRef();
     const ref_input3 = useRef();
     const ref_input4 = useRef();
+
+    const submitHandler1 = (text) => {
+        setCode1(text);
+        if(code1 === ''){
+            ref_input2.current.focus()
+        }
+    }
+    const submitHandler2 = (text) => {
+        setCode2(text);
+        if(code2 === ''){
+            ref_input3.current.focus()
+        }
+    }
+    const submitHandler3 = (text) => {
+        setCode3(text);
+        if(code3 === ''){
+            ref_input4.current.focus()
+        }
+    }
+    const submitHandler4 = (text) => {
+        setCode4(text);
+    }
 
   return (
     <View style={styles.container}>
@@ -24,27 +46,27 @@ const OtpVervification = () => {
         </View>
         <View style={styles.codeStyleContainer}>
             <TextInput style={styles.codeStyle}
-                onChangeText={(text)=> setCode1(text)}
+                onChangeText={submitHandler1}
                 value={code1}
-                onSubmitEditing={() => ref_input2.current.focus()}
+                // onSubmitEditing={() => ref_input2.current.focus()}
                 maxLength={1} />
 
             <TextInput style={styles.codeStyle}
-                onChangeText={(text)=> setCode2(text)}
+                onChangeText={submitHandler2}
                 value={code2}
-                onSubmitEditing={() => ref_input3.current.focus()}
+                // onSubmitEditing={() => ref_input3.current.focus()}
                 ref={ref_input2}
                 maxLength={1} />
 
             <TextInput style={styles.codeStyle}
-                onChangeText={(text)=> setCode3(text)}
+                onChangeText={submitHandler3}
                 value={code3}
-                onSubmitEditing={() => ref_input4.current.focus()}
+                // onSubmitEditing={() => ref_input4.current.focus()}
                 ref={ref_input3}
                 maxLength={1} />
 
             <TextInput style={styles.codeStyle}
-                onChangeText={(text)=> setCode4(text)}
+                onChangeText={submitHandler4}
                 value={code4}
                 ref={ref_input4}
                 maxLength={1} />
@@ -61,7 +83,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     titleContainer: {
-        marginTop: '30%',
+        // marginTop: '30%',
         alignItems: 'center',
     },
     titleText: {
@@ -80,7 +102,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         alignSelf: 'center',
-        marginVertical: '10%',
+        marginVertical: '15%',
     },
     codeStyle: {
         borderWidth: 1,

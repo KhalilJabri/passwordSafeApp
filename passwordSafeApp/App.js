@@ -11,13 +11,14 @@ import SignUp from './screens/SignUp';
 import CheckingMail from './screens/CheckingMail';
 import ForgotPassword from './screens/ForgotPassword';
 import OtpVervification from './screens/OtpVervification';
+import ResetPassword from './screens/ResetPassword';
 
 function App() {
  
 
   return (
    <View style={styles.container}>
-    <OtpVervification />
+    <ResetPassword />
    </View>
   )
 }
