@@ -45,6 +45,7 @@ class User(AbstractBaseUser):
     numero = models.CharField(max_length=15, blank=True)
     otp = models.CharField(max_length=10, blank=True)
     is_active = models.BooleanField(default=True)
+    picture = models.ImageField(upload_to='profileImage/%Y/%m/%d/', blank=True)
     is_admin = models.BooleanField(default=False)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)

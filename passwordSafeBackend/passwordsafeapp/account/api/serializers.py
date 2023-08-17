@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from ..models import User
+from mngaccount.api.serializers import AccountSerializer
 
 class RegisterSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
@@ -29,7 +30,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     #     account.save()
     #     return account
 
-class GetUpdateUsersSerializer(serializers.ModelSerializer):
+class UpdateUsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'name', 'numero']
@@ -49,3 +50,10 @@ class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email', 'password']
+
+class GetUsersWithDataSerializer(serializers.ModelSerializer):
+    accounts = AccountSerializer(many=True, read_only=True)
+    picture = serializers.ImageField(max_length=None, use_url=True, allow_null=True, required=False)
+    class Meta:
+        model = User
+        fields = ['email', 'name', 'numero', 'picture', 'accounts']

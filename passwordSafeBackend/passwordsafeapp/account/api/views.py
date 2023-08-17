@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import RegisterSerializer, GetUpdateUsersSerializer, LoginSerializer
+from .serializers import RegisterSerializer, UpdateUsersSerializer, LoginSerializer, GetUsersWithDataSerializer
 from ..models import User
 
 def get_token_for_user(user):
@@ -44,14 +44,14 @@ class LoginViews(APIView):
 
 
 class GetUpdateUserViews(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     def get(self, request, **kwargs):
         try:
             try:
                 user = User.objects.get(id=kwargs['pk'])
             except User.DoesNotExist:
                 return Response({'message': 'user not found'}, status=status.HTTP_404_NOT_FOUND)
-            serializer = GetUpdateUsersSerializer(user)
+            serializer = GetUsersWithDataSerializer(user)
             return Response({'message': 'user exists', 'data': serializer.data}, status=status.HTTP_200_OK)
         except:
             return Response({'message': 'there is problem'}, status=status.HTTP_400_BAD_REQUEST)
@@ -63,7 +63,7 @@ class GetUpdateUserViews(APIView):
             except User.DoesNotExist:
                 return Response({'message': 'user Not found!'}, status=status.HTTP_404_NOT_FOUND)
 
-            serializer = GetUpdateUsersSerializer(user, data=request.data)
+            serializer = UpdateUsersSerializer(user, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response({'message': 'user updated'}, status=status.HTTP_202_ACCEPTED)
@@ -74,8 +74,11 @@ class GetUpdateUserViews(APIView):
 
     def delete(self, request, pk):
         try:
-            user = User.objects.get(id=pk)
-        except User.DoesNotExist:
-            return Response({'message': 'user not found!'}, status=status.HTTP_404_NOT_FOUND)
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+            try:
+                user = User.objects.get(id=pk)
+            except User.DoesNotExist:
+                return Response({'message': 'user not found!'}, status=status.HTTP_404_NOT_FOUND)
+            user.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except:
+            return Response({"message": "there is probleme!"}, status=status.HTTP_400_BAD_REQUEST)
