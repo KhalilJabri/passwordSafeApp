@@ -1,86 +1,95 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Dimensions } from 'react-native'
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather'
 import { primaryColor } from '../constants/colors';
 import Clipboard from '@react-native-clipboard/clipboard'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useNavigation } from '@react-navigation/native';
 
-const login = () => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
 
-  const handleCopyText = async () => {
-    try {
-      await Clipboard.setString(inputText);
-      alert('Text copied to clipboard!');
-    } catch (error) {
-      alert('Failed to copy text to clipboard.');
-    }
+  const navigation = useNavigation();
+
+  const loginHandler = async () => {
+    // try {
+    //   await Clipboard.setString(inputText);
+    //   alert('Text copied to clipboard!');
+    // } catch (error) {
+    //   alert('Failed to copy text to clipboard.');
+    // }
+    navigation.navigate('acceuil')
   };
 
-  handleCopyText
+  // handleCopyText
 
-  const fetchCopiedText = async () => {
-    const text = await Clipboard.getString();
-    setPassword(text);
-  };
+  // const fetchCopiedText = async () => {
+  //   const text = await Clipboard.getString();
+  //   setPassword(text);
+  // };
 
-  fetchCopiedText
+  // fetchCopiedText
 
   return (
     <View style={styles.container}>
-      <Image source={require('../assets/login.png')} style={styles.imageLogin} />
-      <View style={styles.title}>
-        <Text style={styles.titleText}>Login</Text>
-      </View>
-      <View style={styles.typeContainer}>
-        <Text style={styles.typeText}>Email</Text>
-        <View style={styles.inputContainer}>
-          <Entypo name={'email'} size={17} />
-          <TextInput style={styles.type} 
-            placeholder='Email'
-            onChangeText={(text)=> setEmail(text)}
-            value={email} />
+      <KeyboardAwareScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        enableOnAndroid={true}>
+        <Image source={require('../assets/login.png')} style={styles.imageLogin} />
+        <View style={styles.title}>
+          <Text style={styles.titleText}>Login</Text>
         </View>
-            <View style={styles.line}></View>
-      </View>
-      <View style={styles.typeContainer}>
-        <Text style={styles.typeText}>Password</Text>
-        <View style={styles.inputContainer}>
-          <Feather name={'lock'} size={17}  />
-          <TextInput style={styles.type}
-            placeholder='Password'
-            onChangeText={(text)=> setPassword(text)}
-            value={password}
-            secureTextEntry={showPassword} />
-            <TouchableOpacity style={styles.iconStyle} onPress={()=> setShowPassword(!showPassword)}>
-              <Entypo name={!showPassword ? 'eye' : 'eye-with-line' } size={23} />
+        <View style={styles.typeContainer}>
+          <Text style={styles.typeText}>Email</Text>
+          <View style={styles.inputContainer}>
+            <Entypo name={'email'} size={17} />
+            <TextInput style={styles.type}
+              placeholder='Email'
+              onChangeText={(text) => setEmail(text)}
+              value={email} />
+          </View>
+          <View style={styles.line}></View>
+        </View>
+        <View style={styles.typeContainer}>
+          <Text style={styles.typeText}>Password</Text>
+          <View style={styles.inputContainer}>
+            <Feather name={'lock'} size={17} />
+            <TextInput style={styles.type}
+              placeholder='Password'
+              onChangeText={(text) => setPassword(text)}
+              value={password}
+              secureTextEntry={showPassword} />
+            <TouchableOpacity style={styles.iconStyle} onPress={() => setShowPassword(!showPassword)}>
+              <Entypo name={!showPassword ? 'eye' : 'eye-with-line'} size={23} />
             </TouchableOpacity>
+          </View>
+          <View style={styles.line}></View>
         </View>
-        <View style={styles.line}></View>
-      </View>
-      <TouchableOpacity style={styles.forgotPasswordContainer}>
-        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.loginContainer} onPress={fetchCopiedText}>
-        <Text style={styles.loginText}>Login</Text>
-      </TouchableOpacity>
-      <View style={styles.or}>
-        <View style={styles.orLine}></View>
-        <Text style={styles.orText}>or</Text>
-        <View style={styles.orLine}></View>
-      </View>
-      <TouchableOpacity style={styles.loginGoogleContainer}>
-        <Image source={require('../assets/google_logo.png')} style={styles.loginGoogleImage} />
-        <Text style={styles.loginGoogleText}>Login with google</Text>
-      </TouchableOpacity>
-      <View style={styles.register}>
-        <Text style={styles.staticText}>New to Logistics?</Text>
-        <TouchableOpacity>
-          <Text style={styles.dynamicText}>Register</Text>
+        <TouchableOpacity onPress={()=> navigation.navigate('forgotPassword')} style={styles.forgotPasswordContainer}>
+          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
         </TouchableOpacity>
-      </View>
+        <TouchableOpacity style={styles.loginContainer} onPress={loginHandler}>
+          <Text style={styles.loginText}>Login</Text>
+        </TouchableOpacity>
+        <View style={styles.or}>
+          <View style={styles.orLine}></View>
+          <Text style={styles.orText}>or</Text>
+          <View style={styles.orLine}></View>
+        </View>
+        <TouchableOpacity style={styles.loginGoogleContainer}>
+          <Image source={require('../assets/google_logo.png')} style={styles.loginGoogleImage} />
+          <Text style={styles.loginGoogleText}>Login with google</Text>
+        </TouchableOpacity>
+        <View style={styles.register}>
+          <Text style={styles.staticText}>New to Logistics?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('signUp')}>
+            <Text style={styles.dynamicText}>Register</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAwareScrollView>
 
     </View>
   )
@@ -105,10 +114,11 @@ const styles = StyleSheet.create({
   },
   typeContainer: {
     paddingHorizontal: '4%',
+    marginVertical: '2%',
   },
   typeText: {
-    fontSize: Dimensions.get('window').width / 23,
-    
+    fontSize: Dimensions.get('window').width / 25,
+
   },
   inputContainer: {
     flexDirection: 'row',
@@ -123,7 +133,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#d9d9d9',
     width: '70%',
-    alignSelf: 'center', 
+    alignSelf: 'center',
   },
   iconStyle: {
     position: 'absolute',
@@ -202,4 +212,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default login
+export default Login;

@@ -4,12 +4,15 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import Feather from 'react-native-vector-icons/Feather'
 import { primaryColor } from "../constants/colors";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useNavigation } from "@react-navigation/native";
 
 const ResetPassword = () => {
   const [pass1, setPass1] = useState('');
   const [pass2, setPass2] = useState('');
   const [showPass1, setShowPass1] = useState(true);
   const [showPass2, setShowPass2] = useState(true);
+
+  const navigation = useNavigation();
 
   const scrollViewRef = useRef(null);
 
@@ -19,6 +22,10 @@ const ResetPassword = () => {
       scrollViewRef.current.scrollToEnd({ animated: true });
     }
   };
+
+  const submitHandler = ()=> {
+    navigation.navigate('Auth')
+  }
 
   return (
     <View style={styles.container}>
@@ -59,7 +66,8 @@ const ResetPassword = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity onPress={submitHandler}
+          style={styles.btn}>
           <Text style={styles.btnText}>Submit</Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>

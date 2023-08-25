@@ -8,7 +8,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Feather from 'react-native-vector-icons/Feather'
 import { primaryColor } from '../constants/colors'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { scale, moderateScale, moderateVerticalScale, verticalScale } from 'react-native-size-matters'
+// import { scale, moderateScale, moderateVerticalScale, verticalScale } from 'react-native-size-matters'
+import { useNavigation } from '@react-navigation/native';
 
 const SignUp = () => {
     const [email, setEmail] = useState('');
@@ -17,11 +18,16 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(true);
 
+    const navigation = useNavigation();
+
+    const continueHandler = ()=> {
+        navigation.navigate('Auth')
+    }
 
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView
-                enableOnAndroid={true}
+                // enableOnAndroid={true}
                 contentContainerStyle={{ flexGrow: 1 }}>
                 <Image source={require('../assets/sign_up.png')} style={styles.image} />
                 <View style={styles.title}>
@@ -59,12 +65,13 @@ const SignUp = () => {
                         <Entypo name={!showPassword ? 'eye' : 'eye-with-line'} size={Dimensions.get('window').width / 18} />
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity onPress={continueHandler}
+                    style={styles.button}>
                     <Text style={styles.buttonText}>Continue</Text>
                 </TouchableOpacity>
                 <View style={styles.loginContainer}>
                     <Text style={styles.staticLoginText}>Joined us before?</Text>
-                    <TouchableOpacity style={styles.dynamicLogin}>
+                    <TouchableOpacity onPress={()=> navigation.navigate('Auth')} style={styles.dynamicLogin}>
                         <Text style={styles.dynamicLoginText}>Login</Text>
                     </TouchableOpacity>
                 </View>
@@ -79,9 +86,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
     },
     image: {
-        width: '70%',
-        height: '40%',
+        width: Dimensions.get('window').width ,
+        height: Dimensions.get('window').height / 3.3,
         alignSelf: 'center',
+        resizeMode: 'contain',
     },
     title: {
         paddingHorizontal: '7%',

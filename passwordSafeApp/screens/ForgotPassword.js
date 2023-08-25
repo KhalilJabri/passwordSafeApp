@@ -3,9 +3,16 @@ import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Dimensions 
 import Entypo from 'react-native-vector-icons/Entypo'
 import { primaryColor } from '../constants/colors';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useNavigation } from '@react-navigation/native';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
+
+    const navigation = useNavigation();
+
+    const submitHandler = ()=> {
+        navigation.navigate('checkMail')
+    }
 
     return (
         <View style={styles.container}>
@@ -30,7 +37,7 @@ const ForgotPassword = () => {
                         onChangeText={(text)=> setEmail(text)}
                         value={email} />
                 </View>
-                <TouchableOpacity style={styles.btn}>
+                <TouchableOpacity onPress={submitHandler} style={styles.btn}>
                     <Text style={styles.btnText}>Submit</Text>
                 </TouchableOpacity>
             </View>
@@ -44,17 +51,16 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#ffffff',
         height: '100%',
-        // backgroundColor: 'pink'
     },
     header: {
-        flexGrow: 1,
-        width: '60%',
-        height: '30%',
+        width: Dimensions.get('window').width ,
+        height: Dimensions.get('window').height / 3 ,
         alignSelf: 'center',
     },
     headerImage: {
         width: '100%',
         height: '100%',
+        resizeMode: 'contain',
     },
     body: {
         flexGrow: 2,

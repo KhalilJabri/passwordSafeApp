@@ -16,8 +16,8 @@ const PasswordGenerator = () => {
   const [numberSwitch, setNumberSwitch] = useState(false);
   const [symbolsSwitch, setSymbolsSwitch] = useState(false);
 
-  const copyToClipboard = async() => {
-    Clipboard.setString(password);
+  const copyToClipboard = async () => {
+    await Clipboard.setString(password);
   };
 
   const handleSliderChange = (value) => {
@@ -34,24 +34,24 @@ const PasswordGenerator = () => {
     setPassLength(x)
   }
 
-  const generatePassword = ()=> {
+  const generatePassword = () => {
     let ch = '';
-    while(ch.length < passLength && (upperSwitch === true || lowerSwitch === true || numberSwitch === true || symbolsSwitch === true)) {
+    while (ch.length < passLength && (upperSwitch === true || lowerSwitch === true || numberSwitch === true || symbolsSwitch === true)) {
       let x = Math.floor(Math.random() * (5 - 1) + 1);
       // console.log(x);
-      if(upperSwitch === true && x === 1){
+      if (upperSwitch === true && x === 1) {
         let number = Math.floor(Math.random() * (90 - 65) + 65);
         ch = ch.concat(String.fromCharCode(number))
       }
-      if(lowerSwitch === true && x === 2){
-        let number = Math.floor(Math.random() * (122 -97) + 97);
+      if (lowerSwitch === true && x === 2) {
+        let number = Math.floor(Math.random() * (122 - 97) + 97);
         ch = ch.concat(String.fromCharCode(number));
       }
-      if(numberSwitch === true && x === 3) {
+      if (numberSwitch === true && x === 3) {
         let number = Math.floor(Math.random() * (57 - 48) + 48);
         ch = ch.concat(String.fromCharCode(number))
       }
-      if(symbolsSwitch === true && x === 4){
+      if (symbolsSwitch === true && x === 4) {
         let number = Math.floor(Math.random() * (38 - 35) + 35);
         ch = ch.concat(String.fromCharCode(number))
       }
@@ -84,7 +84,7 @@ const PasswordGenerator = () => {
 
         <View >
           <Slider
-            style={{ width: '90%', height: 40, alignSelf: 'center', transform: [{ scaleX: 2 }], transform: [{ scaleY: 1 }]}}
+            style={{ width: '90%', height: 40, alignSelf: 'center', transform: [{ scaleX: 2 }], transform: [{ scaleY: 1 }] }}
             minimumValue={6}
             maximumValue={20}
             minimumTrackTintColor={primaryColor}

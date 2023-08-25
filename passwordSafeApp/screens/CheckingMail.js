@@ -2,9 +2,13 @@ import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Linking, Dimensions } from 'react-native'
 import { scale, moderateScale, verticalScale } from 'react-native-size-matters'
 import { primaryColor } from '../constants/colors'
+import { useNavigation } from '@react-navigation/native'
 
 const CheckingMail = () => {
     // console.log(Dimensions.get('window').width);
+
+    const navigation = useNavigation();
+
     return (
         <View style={styles.container}>
             <View style={styles.title}>
@@ -15,17 +19,19 @@ const CheckingMail = () => {
                     we have sent a password recover insctrictions to your email
                 </Text>
             </View>
-            <TouchableOpacity onPress={() => { Linking.openURL('mailto:')}}
+            <TouchableOpacity onPress={() => navigation.navigate('OtpVerification')}
                 style={styles.btnStyle}>
-                <Text style={styles.btnStyleText}>open email App</Text>
+                <Text style={styles.btnStyleText}>Set Code</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btnSkip}>
-                <Text style={styles.btnSkipText}>Skip, i'll confirm later</Text>
+            <TouchableOpacity onPress={() => { Linking.openURL('mailto:')}}
+                style={styles.btnSkip}>
+                <Text style={styles.btnSkipText}>open E-mail App</Text>
             </TouchableOpacity>
             <View style={styles.infoStyle}>
                 <Text style={styles.infoStyleText}>Did not receive the email? Check your spam filter, or</Text>
             </View>
-                <TouchableOpacity style={styles.btnInfo}>
+                <TouchableOpacity onPress={() => navigation.navigate('forgotPassword')}
+                    style={styles.btnInfo}>
                     <Text style={styles.btnInfoText}>try another email address </Text>
                 </TouchableOpacity>
         </View>
