@@ -29,7 +29,7 @@ class UserManager(BaseUserManager):
             password=password,
             # password2
         )
-        user.is_active = False
+        # user.is_active = False
         user.is_admin = True
         user.save(using=self._db)
         return user

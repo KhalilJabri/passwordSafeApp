@@ -42,7 +42,8 @@ export const accountData = [
       'url': 'www.google.com',
       'image': '',
       'email': 'exemple@gmail.com',
-      'password': 'ASQR17QE'
+      'password': 'ASQR17QE',
+      'status': true
     },
     {
       'id': '1',

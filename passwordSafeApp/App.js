@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Provider } from 'react-redux';
 
 import Acceuil from './screens/Acceuil';
 import Item from './components/Item';
@@ -21,8 +20,7 @@ import OnBodringNav from './navigation/OnBodringNav';
 import FirstNavigation from './navigation/FirstNavigation';
 import NewAccount from './screens/NewAccount';
 import BottomNavigation from './navigation/BottomNavigation';
-
-// const Stack = createNativeStackNavigator();
+import mainRedux from './redux/mainRedux';
 
 const Loading = () => {
   return (
@@ -59,12 +57,16 @@ function App() {
       {
         loading ? <Loading /> :
           showOnBoadring ?
-            <NavigationContainer>
-              <OnBodringNav />
-            </NavigationContainer> :
-            <NavigationContainer>
-              <FirstNavigation />
-            </NavigationContainer>
+            <Provider store={mainRedux}>
+              <NavigationContainer>
+                <OnBodringNav />
+              </NavigationContainer>
+            </Provider> :
+            <Provider store={mainRedux}>
+              <NavigationContainer>
+                <FirstNavigation />
+              </NavigationContainer>
+            </Provider>
       }
       {/* <NewAccount /> */}
     </View>

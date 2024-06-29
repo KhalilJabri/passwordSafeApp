@@ -1,4 +1,5 @@
 from rest_framework import serializers
+import re
 
 from ..models import User
 from mngaccount.api.serializers import AccountSerializer
@@ -11,6 +12,15 @@ class RegisterSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
+
+    def validate(self, attrs):
+        if len(attrs['email']) == 0 or len(attrs['name']) == 0 or len(attrs['password']) == 0:
+            return serializers.ValidationError({'error': 'fields should not be empty!!'})
+
+        if not re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", attrs['email']):
+            raise serializers.ValidationError({'error': 'Invalid email format'})
+
+        return attrs
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
@@ -57,3 +67,12 @@ class GetUsersWithDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email', 'name', 'numero', 'picture', 'accounts']
+
+class ResetPasswordSerializer(serializers.ModelSerializer):
+    password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    class Meta:
+        model = User
+        fields = ['id', 'password', 'password2']
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }

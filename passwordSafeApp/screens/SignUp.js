@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
     StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Dimensions, ScrollView, KeyboardAvoidingView,
     SafeAreaView
 } from 'react-native'
+// import { Snackbar } from 'react-native-paper';
 import Entypo from 'react-native-vector-icons/Entypo'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Feather from 'react-native-vector-icons/Feather'
@@ -10,6 +11,9 @@ import { primaryColor } from '../constants/colors'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 // import { scale, moderateScale, moderateVerticalScale, verticalScale } from 'react-native-size-matters'
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux'
+
+import * as authAction from '../redux/actions/authAct'
 
 const SignUp = () => {
     const [email, setEmail] = useState('');
@@ -17,11 +21,29 @@ const SignUp = () => {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(true);
+    const [visible, setVisible] = useState(false);
+    const [errorTitle, setErrorTitle] = useState('');
 
+    const dispatch = useDispatch();
     const navigation = useNavigation();
 
-    const continueHandler = ()=> {
-        navigation.navigate('Auth')
+    const continueHandler = async() => {
+        try {
+            await dispatch(authAction.register(email, username, phone, password))
+            console.log('zzz');
+            setErrorTitle('user created succefully!')
+            setVisible(true)
+            // setTimeout(() => {
+            //     // setVisible(false)
+            //     navigation.navigate('Auth')
+            // }, 3000)
+
+        } catch (err) {
+            console.log(err.message);
+            // setErrorTitle(err.message)
+            setVisible(true)
+        //     // setTimeout(() => setVisible(false), 3000)
+        }
     }
 
     return (
@@ -40,6 +62,15 @@ const SignUp = () => {
                         onChangeText={(text) => setEmail(text)}
                         value={email} />
                 </View>
+
+                {/* <Snackbar
+                    visible={visible}
+                    // onDismiss={onDismissSnackBar}
+                    duration={3000}
+                    style={{ zIndex: 1 }}>
+                    {errorTitle}
+                </Snackbar> */}
+
                 <View style={styles.inputContainer}>
                     <MaterialIcons name={'drive-file-rename-outline'} size={Dimensions.get('window').width / 19} />
                     <TextInput style={styles.input}
@@ -71,7 +102,7 @@ const SignUp = () => {
                 </TouchableOpacity>
                 <View style={styles.loginContainer}>
                     <Text style={styles.staticLoginText}>Joined us before?</Text>
-                    <TouchableOpacity onPress={()=> navigation.navigate('Auth')} style={styles.dynamicLogin}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Auth')} style={styles.dynamicLogin}>
                         <Text style={styles.dynamicLoginText}>Login</Text>
                     </TouchableOpacity>
                 </View>
@@ -86,7 +117,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
     },
     image: {
-        width: Dimensions.get('window').width ,
+        width: Dimensions.get('window').width,
         height: Dimensions.get('window').height / 3.3,
         alignSelf: 'center',
         resizeMode: 'contain',
@@ -107,6 +138,8 @@ const styles = StyleSheet.create({
     input: {
         borderBottomWidth: 1,
         width: '80%',
+        paddingHorizontal: Dimensions.get('window').width / 30,
+        fontSize: Dimensions.get('window').width / 27
     },
     iconStyle: {
         position: 'absolute',

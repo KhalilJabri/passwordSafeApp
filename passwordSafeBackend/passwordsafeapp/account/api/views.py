@@ -22,25 +22,27 @@ class RegisterViews(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response({'message': 'user created!', 'data': serializer.data}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+        return Response({'message': 'something went wrong!!', 'error': serializer.errors}, status=status.HTTP_404_NOT_FOUND)
 
 
 class LoginViews(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        # serializer.is_valid(raise_exception=True)
+        if serializer.is_valid():
+            email = serializer.data.get('email')
+            password = serializer.data.get('password')
+            user = authenticate(email=email, password=password)
         # if serializer.is_valid():
-        email = serializer.data.get('email')
-        password = serializer.data.get('password')
-        user = authenticate(email=email, password=password)
-
-        if user is not None:
-            token = get_token_for_user(user)
-            return Response({'message': 'everything is fine!', 'token': token}, status=status.HTTP_201_CREATED)
+            if user is not None:
+                token = get_token_for_user(user)
+                return Response({'message': 'everything is fine!', 'token': token}, status=status.HTTP_201_CREATED)
+            else:
+                # print('azaaaaaaaa')
+                return Response({'message': 'user not found!'}, status=status.HTTP_404_NOT_FOUND)
         else:
-            return Response({'message': 'user not found!'}, status=status.HTTP_404_NOT_FOUND)
-        # else:
-        #     return Response({'message': 'there is problem!', 'errors': serializer.errors}, status=status.HTTP_404_NOT_FOUND)
+            # print('aaaaaaaaaaaaaaaa')
+            return Response({'message': 'there is problem!', 'errors': serializer.errors}, status=status.HTTP_404_NOT_FOUND)
 
 
 class GetUpdateUserViews(APIView):

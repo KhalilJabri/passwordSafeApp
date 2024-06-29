@@ -6,12 +6,19 @@ import { primaryColor } from '../constants/colors';
 import Clipboard from '@react-native-clipboard/clipboard'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { Snackbar } from 'react-native-paper';
+
+import * as authAction from '../redux/actions/authAct';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [errorTitle, setErrorTitle] = useState('');
 
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const loginHandler = async () => {
@@ -21,7 +28,15 @@ const Login = () => {
     // } catch (error) {
     //   alert('Failed to copy text to clipboard.');
     // }
-    navigation.navigate('acceuil')
+    try {
+      await dispatch(authAction.login(email, password));
+      navigation.replace('acceuil')
+      console.log('Login!!')
+    } catch (err) {
+      // console.log(err);
+      setErrorTitle(err.message);
+      setVisible(true);
+    }
   };
 
   // handleCopyText
@@ -31,7 +46,9 @@ const Login = () => {
   //   setPassword(text);
   // };
 
-  // fetchCopiedText
+  const onDismissSnackBar = ()=> {
+    setVisible(false)
+  }
 
   return (
     <View style={styles.container}>
@@ -42,6 +59,22 @@ const Login = () => {
         <View style={styles.title}>
           <Text style={styles.titleText}>Login</Text>
         </View>
+
+        <Snackbar
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+          duration={5000}
+          // action={{
+          //   label: 'Undo',
+          //   onPress: () => {
+          //     // Do something
+          //   },
+          // }}
+            style={{zIndex: 1}}
+          >
+          {errorTitle}
+        </Snackbar>
+
         <View style={styles.typeContainer}>
           <Text style={styles.typeText}>Email</Text>
           <View style={styles.inputContainer}>
@@ -68,7 +101,7 @@ const Login = () => {
           </View>
           <View style={styles.line}></View>
         </View>
-        <TouchableOpacity onPress={()=> navigation.navigate('forgotPassword')} style={styles.forgotPasswordContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('forgotPassword')} style={styles.forgotPasswordContainer}>
           <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.loginContainer} onPress={loginHandler}>

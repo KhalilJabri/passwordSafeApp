@@ -14,7 +14,7 @@ const Stack = createNativeStackNavigator();
 const FirstNavigation = () => {
     return (
         <Stack.Navigator>
-            <Stack.Screen name='Auth' component={Login} />
+            <Stack.Screen name='Auth' component={Login} options={{ title: 'Authentication', headerTitleAlign: 'center' }} />
             <Stack.Screen name='forgotPassword' component={ForgotPassword} />
             <Stack.Screen name='checkMail' component={CheckingMail} />
             <Stack.Screen name='acceuil' component={BottomNavigation} options={{headerShown: false}}/>
